@@ -18,9 +18,8 @@ try:
     resultado = modelo.predict(amostra)
     marcacoes_testes = [-1,-1,1,-1]
     diferencas = resultado - marcacoes_testes
-    print str(diferencas)
     acertos = [d for d in diferencas if d==0]
-    print str(len(acertos))
-    len(amostra)
+    print len(acertos)
+    print str(100 *(float(len(acertos))/float(len(marcacoes_testes))))+"%"
 except Exception as e:
     print str(e)
