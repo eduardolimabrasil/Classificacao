@@ -24,6 +24,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="carregardados.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Classificacao.py" />
   </ItemGroup>
   <ItemGroup>
