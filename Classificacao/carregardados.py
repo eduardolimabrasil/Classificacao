@@ -1,4 +1,5 @@
-import csv
+﻿import csv
+import pandas as pd
 
 def carrega_dados():
     dados = []
@@ -10,3 +11,9 @@ def carrega_dados():
         dados.append([int(home),int(como_funciona),int(contato)])
         marcacoes.append([int(comprou)])
     return dados , marcacoes
+
+def carrega_dados_panda():
+    df = pd.read_csv('Curso.csv')
+    df_X = df[['busca','logado','home']]
+    df_Y = df['Comprou']
+    print df
