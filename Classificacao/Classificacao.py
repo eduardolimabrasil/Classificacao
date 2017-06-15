@@ -1,13 +1,15 @@
 ﻿from sklearn.naive_bayes import MultinomialNB
-from carregardados import carrega_dados
+from carregardados import carrega_dados_panda
 try:
     print "Inicio"
-    X, Y = carrega_dados()    
-    dados_treino = X[:90]
-    marcacoes_treino = Y[:90]
+    X, Y, tamanho = carrega_dados_panda()
+    tamanho_treino = tamanho * 0.9
+    tamanho_teste = tamanho - tamanho_treino
+    dados_treino = X[:int(tamanho_treino)]
+    marcacoes_treino = Y[:int(tamanho_treino)]
 
-    dados_teste =X[-9:]
-    marcacoes_teste = Y[-9:]
+    dados_teste =X[-int(tamanho_teste):]
+    marcacoes_testes = Y[-int(tamanho_teste):]
 
     modelo = MultinomialNB()
     

@@ -15,5 +15,7 @@ def carrega_dados():
 def carrega_dados_panda():
     df = pd.read_csv('Curso.csv')
     df_X = df[['busca','logado','home']]
-    df_Y = df['Comprou']
-    print df
+    df_Y = df['comprou']
+    X_dummers = pd.get_dummies(df_X).astype(int)
+    Y_durmers = df_Y
+    return X_dummers.values, Y_durmers.values, len(df)
