@@ -1,5 +1,7 @@
 ﻿from sklearn.naive_bayes import MultinomialNB
 from carregardados import carrega_dados_panda
+from collections import Counter
+
 try:
     print "Inicio"
     X, Y, tamanho = carrega_dados_panda()
@@ -15,10 +17,11 @@ try:
     
     modelo.fit(dados_treino,marcacoes_treino)
     resultado = modelo.predict(dados_teste)
-
-    diferencas = resultado - marcacoes_testes
-    acertos = [d for d in diferencas if d==0]
-    print len(acertos)
+    acertos = (resultado == marcacoes_testes)
+    acertos_base = max(Counter(marcacoes_testes).itervalues())
+    taxa_acertos_base = 100 * acertos_base / len(marcacoes_testes)
+    print float(taxa_acertos_base)
+    print float(sum(acertos))
     print str(100 *(float(len(acertos))/float(len(marcacoes_testes))))+"%"
 except Exception as e:
     print str(e)
