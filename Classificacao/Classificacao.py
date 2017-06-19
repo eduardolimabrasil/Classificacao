@@ -3,21 +3,16 @@ from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier
 from carregardados import carrega_dados_panda
 from collections import Counter
 
-def fit_and_predict(nome,dados_treino,marcacoes_treino,dados_teste,marcacoes_testes,dados_validacao,marcacoes_validacao):
+def fit_and_predict(nome,modelo,dados_treino,marcacoes_treino,dados_teste,marcacoes_testes,dados_validacao,marcacoes_validacao):
     modelo.fit(dados_treino,marcacoes_treino)
     resultado = modelo.predict(dados_teste)
     acertos = (resultado == marcacoes_testes)
     total_de_acertos = sum(acertos)
     total_de_elementos = len(marcacoes_testes)
     treino = 100.0 * total_de_acertos/total_de_elementos
-    resultado2 = modelo.predict(dados_teste)
-    validado = (resultado2 == marcacoes_testes)
-    total_de_validacoes = sum(validado)
-    total_de_elementos_validacao = len(marcacoes_validacao)
-    validacao = 100.0 * total_de_validacoes / total_de_elementos_validacao
-    msg = u"Porcentagem de acerto {0} é de {1}% é validado em {2}".format(nome,treino,validacao)
+    msg = u"Porcentagem de acerto {0} é de {1}% ".format(nome,treino)
     print msg
-
+    return treino
 try:
     print "Inicio"
     X, Y, tamanho = carrega_dados_panda()
@@ -34,16 +29,27 @@ try:
     marcacoes_validacao = Y[int(tamanho_validacao):]
 
     modelo = MultinomialNB()
-    fit_and_predict('Multinomial',dados_treino,marcacoes_treino,dados_teste,marcacoes_testes,dados_validacao,marcacoes_validacao)
+    treinoMultinomial = fit_and_predict('Multinomial',modelo,dados_treino,marcacoes_treino,dados_teste,marcacoes_testes,dados_validacao,marcacoes_validacao)
 
     modelo = AdaBoostClassifier()
-    fit_and_predict('AdaBoostClassifier',dados_treino,marcacoes_treino,dados_teste,marcacoes_testes,dados_validacao,marcacoes_validacao)
+    treinoAdaboost  = fit_and_predict('AdaBoostClassifier',modelo,dados_treino,marcacoes_treino,dados_teste,marcacoes_testes,dados_validacao,marcacoes_validacao)
+    if treinoAdaboost > treinoMultinomial:
+        modelo = AdaBoostClassifier()
+        print "AdaBoost"
+    else:
+        modelo = MultinomialNB()
+        print "Multinomial"
 
-    modelo = GradientBoostingClassifier()
-    fit_and_predict('GradientBoostingClassifier',dados_treino,marcacoes_treino,dados_teste,marcacoes_testes,dados_validacao,marcacoes_validacao)
-
+    modelo.fit(dados_treino,marcacoes_treino)
+    resultado2 = modelo.predict(dados_validacao)
+    validado = (resultado2 == marcacoes_validacao)
+    total_de_validacoes = sum(validado)
+    total_de_elementos_validacao = len(marcacoes_validacao)
+    validacao = 100.0 * total_de_validacoes / total_de_elementos_validacao
+    msg = u"Validado de acerto é de {0}% ".format(validacao)
+    print msg
     acertos_base = max(Counter(marcacoes_testes).itervalues())
     taxa_acertos_base = 100 * acertos_base / len(marcacoes_testes)
-    print float(taxa_acertos_base)
+    print "Taxa Base de Acertos:{0}".format(taxa_acertos_base)
 except Exception as e:
     print str(e)
