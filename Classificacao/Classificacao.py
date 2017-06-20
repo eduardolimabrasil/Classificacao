@@ -1,5 +1,5 @@
 ﻿from sklearn.naive_bayes import MultinomialNB
-from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier
+from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier, RandomForestClassifier
 from carregardados import carrega_dados_panda
 from collections import Counter
 
@@ -33,6 +33,7 @@ try:
 
     modelo = AdaBoostClassifier()
     treinoAdaboost  = fit_and_predict('AdaBoostClassifier',modelo,dados_treino,marcacoes_treino,dados_teste,marcacoes_testes,dados_validacao,marcacoes_validacao)
+
     if treinoAdaboost > treinoMultinomial:
         modelo = AdaBoostClassifier()
         print "AdaBoost"
